@@ -10,6 +10,10 @@
  *******************************************************************************/
 package org.eclipse.swt.widgets;
 
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.stage.Stage;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTError;
 import org.eclipse.swt.SWTException;
@@ -95,6 +99,19 @@ import org.eclipse.swt.graphics.Rectangle;
 public class Display extends Device {
 
 	Tray tray;
+	static Stage primaryStage;
+	static Shell primaryShell;
+	static Object startupMutex = new Object();
+
+	public static class SWTApp extends Application {
+		@Override
+		public void start(Stage primaryStage) throws Exception {
+			Display.primaryStage = primaryStage;
+			synchronized (Display.startupMutex) {
+				Display.startupMutex.notifyAll();
+			}
+		}
+	}
 	
 	/**
 	 * Constructs a new instance of this class.
@@ -129,6 +146,21 @@ public class Display extends Device {
 	 */
 	public Display(DeviceData data) {
 		super(data);
+		synchronized (startupMutex) {
+			new Thread() {
+				@Override
+				public void run() {
+					Application.launch(SWTApp.class, new String[0]);
+				}
+			}.start();
+			
+			try {
+				startupMutex.wait();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 
 	/**
@@ -1639,6 +1671,12 @@ public class Display extends Device {
 	 */
 	public boolean sleep() {
 		// TODO
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return false;
 	}
 
@@ -1702,8 +1740,25 @@ public class Display extends Device {
 	 * 
 	 * @see #asyncExec
 	 */
-	public void syncExec(Runnable runnable) {
-		// TODO
+	public void syncExec(final Runnable runnable) {
+		final Object mutex = new Object();
+		synchronized (mutex) {
+			Platform.runLater(new Runnable() {
+				@Override
+				public void run() {
+					runnable.run();
+					synchronized (mutex) {
+						mutex.notifyAll();
+					}
+				}
+			});
+			try {
+				mutex.wait();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 
 	/**

@@ -10,6 +10,13 @@
  *******************************************************************************/
 package org.eclipse.swt.widgets;
 
+import javafx.application.Platform;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.events.ShellListener;
@@ -106,6 +113,9 @@ import org.eclipse.swt.graphics.Region;
  */
 public class Shell extends Decorations {
 
+	Display display;
+	Stage stage;
+	
 	/**
 	 * Constructs a new instance of this class. This is equivalent to calling
 	 * <code>Shell((Display) null)</code>.
@@ -246,9 +256,48 @@ public class Shell extends Decorations {
 	 */
 	public Shell(Display display, int style) {
 		super(null, style);
-		// TODO
+		if (display != null) {
+			this.display = display;
+		} else {
+			this.display = Display.getCurrent();
+			if (this.display == null)
+				this.display = Display.getDefault();
+		}
+
+		init();
 	}
 
+	void init() {
+		if (!Platform.isFxApplicationThread()) {
+			this.display.syncExec(new Runnable() {
+				@Override
+				public void run() {
+					init();
+				}
+			});
+			return;
+		}
+		
+		if (Display.primaryShell == null) {
+			stage = Display.primaryStage;
+			Display.primaryShell = this;
+		} else {
+			// TODO StageStyle
+			// TODO add to display list
+			stage = new Stage();
+		}
+		
+		// TODO stow the root?
+		StackPane root = new StackPane();
+		stage.setScene(new Scene(root, 300, 250));
+		
+		stage.onCloseRequestProperty().set(new EventHandler<WindowEvent>() {
+			public void handle(WindowEvent arg0) {
+				dispose();
+			};
+		});
+	}
+	
 	/**
 	 * Constructs a new instance of this class given only its parent. It is
 	 * created with style <code>SWT.DIALOG_TRIM</code>.
@@ -276,8 +325,7 @@ public class Shell extends Decorations {
 	 *                </ul>
 	 */
 	public Shell(Shell parent) {
-		super(parent, SWT.DIALOG_TRIM);
-		// TODO
+		this(parent.display, SWT.DIALOG_TRIM);
 	}
 
 	/**
@@ -334,8 +382,7 @@ public class Shell extends Decorations {
 	 * @see SWT#SHEET
 	 */
 	public Shell(Shell parent, int style) {
-		super(parent, style);
-		// TODO
+		this(parent.display, style);
 	}
 
 	/**
@@ -386,6 +433,11 @@ public class Shell extends Decorations {
 		// TODO
 	}
 
+	@Override
+	public void dispose() {
+		stage = null;
+	}
+	
 	/**
 	 * Returns a ToolBar object representing the tool bar that can be shown in
 	 * the receiver's trim. This will return <code>null</code> if the platform
@@ -538,6 +590,11 @@ public class Shell extends Decorations {
 		return null;
 	}
 
+	@Override
+	public boolean isDisposed() {
+		return stage == null;
+	}
+	
 	/**
 	 * Moves the receiver to the top of the drawing order for the display on
 	 * which it was created (so that all other shells on that display, which are
@@ -561,7 +618,16 @@ public class Shell extends Decorations {
 	 * @see Shell#forceActive
 	 */
 	public void open() {
-		// TODO
+		if (!Platform.isFxApplicationThread()) {
+			display.syncExec(new Runnable() {
+				@Override
+				public void run() {
+					open();
+				}
+			});
+			return;
+		}
+		stage.show();
 	}
 
 	/**
