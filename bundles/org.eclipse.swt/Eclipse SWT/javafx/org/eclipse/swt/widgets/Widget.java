@@ -10,6 +10,9 @@
  *******************************************************************************/
 package org.eclipse.swt.widgets;
 
+import javafx.scene.Node;
+import javafx.scene.layout.Pane;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.events.DisposeListener;
@@ -46,8 +49,12 @@ import org.eclipse.swt.internal.SWTEventListener;
 public abstract class Widget {
 
 	int style;
+	Widget parent;
 	Display display;
 	EventTable eventTable;
+	
+	// JavaFX root node for this widget
+	Node node;
 
 	/* Default size for widgets */
 	static final int DEFAULT_WIDTH	= 64;
@@ -93,7 +100,11 @@ public abstract class Widget {
 	 * @see #getStyle
 	 */
 	public Widget(Widget parent, int style) {
-		// TODO
+		this.parent = parent;
+		this.style = style;
+		
+		if (parent != null)
+			display = parent.display;
 	}
 
 	/**
@@ -727,4 +738,11 @@ public abstract class Widget {
 		// TODO
 	}
 
+	void setNode(Node node) {
+		this.node = node;
+		
+		// Add it to parent if it's a Pane
+		if (parent != null && parent.node instanceof Pane)
+			((Pane)parent.node).getChildren().add(node);
+	}
 }

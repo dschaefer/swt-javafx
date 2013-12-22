@@ -113,7 +113,6 @@ import org.eclipse.swt.graphics.Region;
  */
 public class Shell extends Decorations {
 
-	Display display;
 	Stage stage;
 	
 	/**
@@ -296,6 +295,8 @@ public class Shell extends Decorations {
 				dispose();
 			};
 		});
+		
+		setNode(root);
 	}
 	
 	/**

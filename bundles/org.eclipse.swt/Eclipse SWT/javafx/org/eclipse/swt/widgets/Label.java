@@ -10,6 +10,8 @@
  *******************************************************************************/
 package org.eclipse.swt.widgets;
 
+import javafx.application.Platform;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.graphics.Image;
@@ -94,9 +96,34 @@ public class Label extends Control {
 	 */
 	public Label(Composite parent, int style) {
 		super(parent, style);
-		// TODO
+		init();
 	}
 
+	private void init() {
+		if (!Platform.isFxApplicationThread()) {
+			display.syncExec(new Runnable() {
+				@Override
+				public void run() {
+					init();
+				}
+			});
+			return;
+		}
+		javafx.scene.control.Label label = new javafx.scene.control.Label();
+
+		switch (style) {
+		case SWT.CENTER:
+			label.setStyle("-fx-alignment: center;");
+			break;
+		}
+		
+		setNode(label);
+	}
+	
+	private javafx.scene.control.Label getNode() {
+		return (javafx.scene.control.Label)node;
+	}
+	
 	/**
 	 * Returns a value which describes the position of the text or image in the
 	 * receiver. The value will be one of <code>LEFT</code>, <code>RIGHT</code>
@@ -232,7 +259,7 @@ public class Label extends Control {
 	 *                </ul>
 	 */
 	public void setText(String string) {
-		// TODO
+		getNode().setText(string);
 	}
 
 }
