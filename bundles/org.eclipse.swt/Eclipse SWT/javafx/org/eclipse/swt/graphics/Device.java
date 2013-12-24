@@ -12,6 +12,7 @@ package org.eclipse.swt.graphics;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
+import org.eclipse.swt.widgets.Display;
 
 /**
  * This class is the abstract superclass of all device objects, such as the
@@ -25,9 +26,9 @@ import org.eclipse.swt.SWTException;
 public abstract class Device implements Drawable {
 
 	private boolean disposed;
-	
+
 	boolean tracking = false;
-	
+
 	/**
 	 * Constructs a new instance of this class.
 	 * <p>
@@ -60,9 +61,33 @@ public abstract class Device implements Drawable {
 		// TODO
 	}
 
-	static Device getDevice () {
-		return null;
+	/*
+	 * TEMPORARY CODE. When a graphics object is created and the device
+	 * parameter is null, the current Display is used. This presents a problem
+	 * because SWT graphics does not reference classes in SWT widgets. The
+	 * correct fix is to remove this feature. Unfortunately, too many
+	 * application programs rely on this feature.
+	 */
+	protected static Device CurrentDevice;
+	protected static Runnable DeviceFinder;
+	static {
+		try {
+			Class.forName("org.eclipse.swt.widgets.Display");
+		} catch (ClassNotFoundException e) {
+		}
 	}
+
+	/*
+	 * TEMPORARY CODE.
+	 */
+	static synchronized Device getDevice() {
+		if (DeviceFinder != null)
+			DeviceFinder.run();
+		Device device = CurrentDevice;
+		CurrentDevice = null;
+		return device;
+	}
+
 	/**
 	 * Throws an <code>SWTException</code> if the receiver can not be accessed
 	 * by the caller. This may include both checks on the state of the receiver
@@ -123,10 +148,10 @@ public abstract class Device implements Drawable {
 		// TODO
 	}
 
-	void dispose_Object (Object object) {
+	void dispose_Object(Object object) {
 		// TODO
 	}
-	
+
 	/**
 	 * Destroys the device in the operating system and releases the device's
 	 * handle. If the device does not have a handle, this method may do nothing
@@ -314,9 +339,8 @@ public abstract class Device implements Drawable {
 	 *                </ul>
 	 */
 	public Font getSystemFont() {
-		checkDevice();
 		// TODO
-		return null;
+		return new Font(Display.getDefault(), new FontData());
 	}
 
 	/**
@@ -431,10 +455,10 @@ public abstract class Device implements Drawable {
 		return false;
 	}
 
-	void new_Object (Object object) {
+	void new_Object(Object object) {
 		// TODO
 	}
-	
+
 	/**
 	 * Releases any internal resources back to the operating system and clears
 	 * all fields except the device handle.

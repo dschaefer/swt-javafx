@@ -102,6 +102,7 @@ public class Display extends Device {
 	static Stage primaryStage;
 	static Shell primaryShell;
 	static Object startupMutex = new Object();
+	static Display defaultDisplay;
 
 	public static class SWTApp extends Application {
 		@Override
@@ -112,7 +113,30 @@ public class Display extends Device {
 			}
 		}
 	}
-	
+
+	/*
+	 * TEMPORARY CODE. Install the runnable that gets the current display. This
+	 * code will be removed in the future.
+	 */
+	static {
+		DeviceFinder = new Runnable() {
+			public void run() {
+				Device device = getCurrent();
+				if (device == null) {
+					device = getDefault();
+				}
+				setDevice(device);
+			}
+		};
+	}
+
+	/*
+	 * TEMPORARY CODE.
+	 */
+	static void setDevice(Device device) {
+		CurrentDevice = device;
+	}
+
 	/**
 	 * Constructs a new instance of this class.
 	 * <p>
@@ -146,6 +170,7 @@ public class Display extends Device {
 	 */
 	public Display(DeviceData data) {
 		super(data);
+		defaultDisplay = this;
 		synchronized (startupMutex) {
 			new Thread() {
 				@Override
@@ -153,7 +178,7 @@ public class Display extends Device {
 					Application.launch(SWTApp.class, new String[0]);
 				}
 			}.start();
-			
+
 			try {
 				startupMutex.wait();
 			} catch (InterruptedException e) {
@@ -594,15 +619,14 @@ public class Display extends Device {
 	 * @return the default display
 	 */
 	public static Display getDefault() {
-		// TODO
-		return null;
+		return defaultDisplay;
 	}
 
-	static <T> boolean isValidClass (Class<T> clazz) {
+	static <T> boolean isValidClass(Class<T> clazz) {
 		// TODO
 		return false;
 	}
-	
+
 	/**
 	 * Returns the single instance of the application menu bar, or
 	 * <code>null</code> if there is no application menu bar for the platform.
@@ -1076,7 +1100,7 @@ public class Display extends Device {
 		return 0;
 	}
 
-	boolean isValidThread () {
+	boolean isValidThread() {
 		// TODO
 		return false;
 	}
@@ -1476,7 +1500,7 @@ public class Display extends Device {
 		// TODO
 		return null;
 	}
-	
+
 	void sendPreEvent(Event event) {
 		// TODO
 	}
@@ -1796,7 +1820,7 @@ public class Display extends Device {
 		// TODO
 	}
 
-	void wakeThread () {
+	void wakeThread() {
 		// TODO
 	}
 

@@ -101,7 +101,7 @@ public class Label extends Control {
 
 	private void init() {
 		if (!Platform.isFxApplicationThread()) {
-			display.syncExec(new Runnable() {
+			getDisplay().syncExec(new Runnable() {
 				@Override
 				public void run() {
 					init();

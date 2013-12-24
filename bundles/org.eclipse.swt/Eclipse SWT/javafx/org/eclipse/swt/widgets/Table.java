@@ -10,6 +10,8 @@
  *******************************************************************************/
 package org.eclipse.swt.widgets;
 
+import java.util.ArrayList;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.events.SelectionEvent;
@@ -76,6 +78,8 @@ import org.eclipse.swt.graphics.Point;
  */
 public class Table extends Composite {
 
+	private java.util.List<TableItem> items = new ArrayList<>();
+	
 	/**
 	 * Constructs a new instance of this class given its parent and a style
 	 * value describing its behavior and appearance.
@@ -119,6 +123,10 @@ public class Table extends Composite {
 	public Table(Composite parent, int style) {
 		super(parent, style);
 		// TODO
+	}
+	
+	void addItem(TableItem item) {
+		items.add(item);
 	}
 
 	/**
@@ -402,7 +410,7 @@ public class Table extends Composite {
 	 */
 	public TableColumn getColumn(int index) {
 		// TODO
-		return null;
+		return new TableColumn(this, 0);
 	}
 
 	/**
@@ -581,8 +589,7 @@ public class Table extends Composite {
 	 *                </ul>
 	 */
 	public TableItem getItem(int index) {
-		// TODO
-		return null;
+		return items.get(index);
 	}
 
 	/**

@@ -32,6 +32,9 @@ import org.eclipse.swt.SWTException;
  *      information</a>
  */
 public final class Font extends Resource {
+	
+	private FontData[] fontData;
+
 	/**
 	 * Constructs a new font given a device and font data which describes the
 	 * desired font's appearance.
@@ -59,6 +62,7 @@ public final class Font extends Resource {
 	 */
 	public Font(Device device, FontData fd) {
 		super(device);
+		fontData = new FontData[] { fd };
 		// TODO
 	}
 
@@ -93,6 +97,7 @@ public final class Font extends Resource {
 	 */
 	public Font(Device device, FontData[] fds) {
 		super(device);
+		fontData = fds;
 		// TODO
 	}
 
@@ -127,6 +132,8 @@ public final class Font extends Resource {
 	 */
 	public Font(Device device, String name, int height, int style) {
 		super(device);
+		FontData fd = new FontData(name, height, style);
+		fontData = new FontData[] { fd };
 		// TODO
 	}
 
@@ -150,8 +157,7 @@ public final class Font extends Resource {
 	 *                </ul>
 	 */
 	public FontData[] getFontData() {
-		// TODO
-		return null;
+		return fontData;
 	}
 
 	/**

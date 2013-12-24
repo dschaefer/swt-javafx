@@ -10,6 +10,8 @@
  *******************************************************************************/
 package org.eclipse.swt.widgets;
 
+import java.util.ArrayList;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.events.SelectionEvent;
@@ -86,6 +88,9 @@ import org.eclipse.swt.graphics.Point;
  */
 public class Tree extends Composite {
 
+	private java.util.List<TreeItem> items = new ArrayList<>();
+	private java.util.List<TreeColumn> columns = new ArrayList<>();
+
 	/**
 	 * Constructs a new instance of this class given its parent and a style
 	 * value describing its behavior and appearance.
@@ -127,6 +132,16 @@ public class Tree extends Composite {
 	 */
 	public Tree(Composite parent, int style) {
 		super(parent, style);
+		addColumn(new TreeColumn(this, 0));
+		// TODO
+	}
+
+	void addItem(TreeItem item) {
+		items.add(item);
+	}
+
+	void addColumn(TreeColumn column) {
+		columns.add(column);
 	}
 
 	/**
@@ -335,8 +350,7 @@ public class Tree extends Composite {
 	 * @since 3.1
 	 */
 	public TreeColumn getColumn(int index) {
-		// TODO
-		return null;
+		return columns.get(index);
 	}
 
 	/**
@@ -622,7 +636,7 @@ public class Tree extends Composite {
 	 */
 	public TreeItem[] getItems() {
 		// TODO
-		return null;
+		return items.toArray(new TreeItem[items.size()]);
 	}
 
 	/**

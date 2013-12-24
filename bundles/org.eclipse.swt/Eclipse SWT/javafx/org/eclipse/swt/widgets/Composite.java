@@ -10,6 +10,11 @@
  *******************************************************************************/
 package org.eclipse.swt.widgets;
 
+import javafx.application.Platform;
+import javafx.collections.ObservableList;
+import javafx.scene.Node;
+import javafx.scene.layout.Pane;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.graphics.GC;
@@ -90,8 +95,33 @@ public class Composite extends Scrollable {
 	 */
 	public Composite(Composite parent, int style) {
 		super(parent, style);
+		init();
 	}
 
+	private void init() {
+		if (!Platform.isFxApplicationThread()) {
+			getDisplay().syncExec(new Runnable() {
+				@Override
+				public void run() {
+					init();
+				}
+			});
+			return;
+		}
+
+		createNode();
+	}
+
+	@Override
+	void createNode() {
+		Pane pane = new Pane();
+		setNode(pane);
+	}
+	
+	void addChild(Control child) {
+		getNode().getChildren().add(child.node);
+	}
+	
 	/**
 	 * Clears any data that has been cached by a Layout for all widgets that are
 	 * in the parent hierarchy of the changed control up to and including the
@@ -217,8 +247,12 @@ public class Composite extends Scrollable {
 	 *                </ul>
 	 */
 	public Control[] getChildren() {
-		// TODO
-		return null;
+		ObservableList<Node> nodes = getNode().getChildren();
+		Control[] children = new Control[nodes.size()];
+		int i = 0;
+		for (Node node : nodes)
+			children[i] = (Control)node.getUserData();
+		return children;
 	}
 
 	/**
@@ -284,6 +318,9 @@ public class Composite extends Scrollable {
 		return null;
 	}
 
+	private Pane getNode() {
+		return (Pane)node;
+	}
 	/**
 	 * Returns <code>true</code> if the receiver or any ancestor up to and
 	 * including the receiver's nearest ancestor shell has deferred the

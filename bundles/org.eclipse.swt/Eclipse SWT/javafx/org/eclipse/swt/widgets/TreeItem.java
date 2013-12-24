@@ -77,6 +77,7 @@ public class TreeItem extends Item {
 	 */
 	public TreeItem(Tree parent, int style) {
 		super(parent, style);
+		parent.addItem(this);
 		// TODO
 	}
 
@@ -122,6 +123,7 @@ public class TreeItem extends Item {
 	 */
 	public TreeItem(Tree parent, int style, int index) {
 		super(parent, style);
+		parent.addItem(this);
 		// TODO
 	}
 
@@ -415,7 +417,7 @@ public class TreeItem extends Item {
 	 */
 	public Font getFont() {
 		// TODO
-		return null;
+		return getDisplay().getSystemFont();
 	}
 
 	/**
@@ -438,7 +440,7 @@ public class TreeItem extends Item {
 	 */
 	public Font getFont(int index) {
 		// TODO
-		return null;
+		return getDisplay().getSystemFont();
 	}
 
 	/**

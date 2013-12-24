@@ -83,6 +83,7 @@ public class TreeColumn extends Item {
 	 */
 	public TreeColumn(Tree parent, int style) {
 		super(parent, style);
+		parent.addColumn(this);
 		// TODO
 	}
 
@@ -133,6 +134,7 @@ public class TreeColumn extends Item {
 	 */
 	public TreeColumn(Tree parent, int style, int index) {
 		super(parent, style);
+		parent.addColumn(this);
 		// TODO
 	}
 

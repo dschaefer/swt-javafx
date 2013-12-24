@@ -80,6 +80,7 @@ public class TableItem extends Item {
 	 */
 	public TableItem(Table parent, int style, int index) {
 		super(parent, style);
+		parent.addItem(this);
 		// TODO
 	}
 
@@ -121,6 +122,7 @@ public class TableItem extends Item {
 	 */
 	public TableItem(Table parent, int style) {
 		super(parent, style);
+		parent.addItem(this);
 	}
 
 	/**
@@ -244,7 +246,8 @@ public class TableItem extends Item {
 	 * @since 3.0
 	 */
 	public Font getFont() {
-		return null;
+		// TODO
+		return getDisplay().getSystemFont();
 	}
 
 	/**
@@ -267,7 +270,7 @@ public class TableItem extends Item {
 	 */
 	public Font getFont(int index) {
 		// TODO
-		return null;
+		return getDisplay().getSystemFont();
 	}
 
 	/**

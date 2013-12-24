@@ -12,27 +12,32 @@ package org.eclipse.swt.widgets;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
-import org.eclipse.swt.graphics.Rectangle;
 
 /**
- * This class is the abstract superclass of all classes which represent controls
- * that have standard scroll bars.
+ * Instances of the receiver represent an unselectable user interface object
+ * that is used to display progress, typically in the form of a bar.
  * <dl>
  * <dt><b>Styles:</b></dt>
- * <dd>H_SCROLL, V_SCROLL</dd>
- * <dt><b>Events:</b>
+ * <dd>SMOOTH, HORIZONTAL, VERTICAL, INDETERMINATE</dd>
+ * <dt><b>Events:</b></dt>
  * <dd>(none)</dd>
  * </dl>
  * <p>
- * IMPORTANT: This class is intended to be subclassed <em>only</em> within the
- * SWT implementation.
+ * Note: Only one of the styles HORIZONTAL and VERTICAL may be specified.
+ * </p>
+ * <p>
+ * IMPORTANT: This class is <em>not</em> intended to be subclassed.
  * </p>
  * 
+ * @see <a href="http://www.eclipse.org/swt/snippets/#progressbar">ProgressBar
+ *      snippets</a>
+ * @see <a href="http://www.eclipse.org/swt/examples.php">SWT Example:
+ *      ControlExample</a>
  * @see <a href="http://www.eclipse.org/swt/">Sample code and further
  *      information</a>
  * @noextend This class is not intended to be subclassed by clients.
  */
-public abstract class Scrollable extends Control {
+public class ProgressBar extends Control {
 
 	/**
 	 * Constructs a new instance of this class given its parent and a style
@@ -64,78 +69,21 @@ public abstract class Scrollable extends Control {
 	 *                allowed subclass</li>
 	 *                </ul>
 	 * 
-	 * @see SWT#H_SCROLL
-	 * @see SWT#V_SCROLL
+	 * @see SWT#SMOOTH
+	 * @see SWT#HORIZONTAL
+	 * @see SWT#VERTICAL
+	 * @see SWT#INDETERMINATE
 	 * @see Widget#checkSubclass
 	 * @see Widget#getStyle
 	 */
-	public Scrollable(Composite parent, int style) {
+	public ProgressBar(Composite parent, int style) {
 		super(parent, style);
 	}
 
 	/**
-	 * Given a desired <em>client area</em> for the receiver (as described by
-	 * the arguments), returns the bounding rectangle which would be required to
-	 * produce that client area.
-	 * <p>
-	 * In other words, it returns a rectangle such that, if the receiver's
-	 * bounds were set to that rectangle, the area of the receiver which is
-	 * capable of displaying data (that is, not covered by the "trimmings")
-	 * would be the rectangle described by the arguments (relative to the
-	 * receiver's parent).
-	 * </p>
+	 * Returns the maximum value which the receiver will allow.
 	 * 
-	 * @param x
-	 *            the desired x coordinate of the client area
-	 * @param y
-	 *            the desired y coordinate of the client area
-	 * @param width
-	 *            the desired width of the client area
-	 * @param height
-	 *            the desired height of the client area
-	 * @return the required bounds to produce the given client area
-	 * 
-	 * @exception SWTException
-	 *                <ul>
-	 *                <li>ERROR_WIDGET_DISPOSED - if the receiver has been
-	 *                disposed</li>
-	 *                <li>ERROR_THREAD_INVALID_ACCESS - if not called from the
-	 *                thread that created the receiver</li>
-	 *                </ul>
-	 * 
-	 * @see #getClientArea
-	 */
-	public Rectangle computeTrim(int x, int y, int width, int height) {
-		// TODO
-		return new Rectangle(0, 0, 0, 0);
-	}
-
-	/**
-	 * Returns a rectangle which describes the area of the receiver which is
-	 * capable of displaying data (that is, not covered by the "trimmings").
-	 * 
-	 * @return the client area
-	 * 
-	 * @exception SWTException
-	 *                <ul>
-	 *                <li>ERROR_WIDGET_DISPOSED - if the receiver has been
-	 *                disposed</li>
-	 *                <li>ERROR_THREAD_INVALID_ACCESS - if not called from the
-	 *                thread that created the receiver</li>
-	 *                </ul>
-	 * 
-	 * @see #computeTrim
-	 */
-	public Rectangle getClientArea() {
-		// TODO
-		return new Rectangle(0, 0, 0, 0);
-	}
-
-	/**
-	 * Returns the receiver's horizontal scroll bar if it has one, and null if
-	 * it does not.
-	 * 
-	 * @return the horizontal scroll bar (or null)
+	 * @return the maximum
 	 * 
 	 * @exception SWTException
 	 *                <ul>
@@ -145,42 +93,15 @@ public abstract class Scrollable extends Control {
 	 *                thread that created the receiver</li>
 	 *                </ul>
 	 */
-	public ScrollBar getHorizontalBar() {
-		// TODO
-		return null;
-	}
-
-	/**
-	 * Returns the mode of the receiver's scrollbars. This will be
-	 * <em>bitwise</em> OR of one or more of the constants defined in class
-	 * <code>SWT</code>.<br>
-	 * <li><code>SWT.SCROLLBAR_OVERLAY</code> - if receiver uses overlay
-	 * scrollbars</li> <li><code>SWT.NONE</code> - otherwise</li>
-	 * 
-	 * @return the mode of scrollbars
-	 * 
-	 * @exception SWTException
-	 *                <ul>
-	 *                <li>ERROR_WIDGET_DISPOSED - if the receiver has been
-	 *                disposed</li>
-	 *                <li>ERROR_THREAD_INVALID_ACCESS - if not called from the
-	 *                thread that created the receiver</li>
-	 *                </ul>
-	 * 
-	 * @see SWT#SCROLLBAR_OVERLAY
-	 * 
-	 * @since 3.8
-	 */
-	public int getScrollbarsMode() {
+	public int getMaximum() {
 		// TODO
 		return 0;
 	}
 
 	/**
-	 * Returns the receiver's vertical scroll bar if it has one, and null if it
-	 * does not.
+	 * Returns the minimum value which the receiver will allow.
 	 * 
-	 * @return the vertical scroll bar (or null)
+	 * @return the minimum
 	 * 
 	 * @exception SWTException
 	 *                <ul>
@@ -190,9 +111,145 @@ public abstract class Scrollable extends Control {
 	 *                thread that created the receiver</li>
 	 *                </ul>
 	 */
-	public ScrollBar getVerticalBar() {
+	public int getMinimum() {
 		// TODO
-		return null;
+		return 0;
+	}
+
+	/**
+	 * Returns the single 'selection' that is the receiver's position.
+	 * 
+	 * @return the selection
+	 * 
+	 * @exception SWTException
+	 *                <ul>
+	 *                <li>ERROR_WIDGET_DISPOSED - if the receiver has been
+	 *                disposed</li>
+	 *                <li>ERROR_THREAD_INVALID_ACCESS - if not called from the
+	 *                thread that created the receiver</li>
+	 *                </ul>
+	 */
+	public int getSelection() {
+		// TODO
+		return 0;
+	}
+
+	/**
+	 * Returns the state of the receiver. The value will be one of:
+	 * <ul>
+	 * <li>{@link SWT#NORMAL}</li>
+	 * <li>{@link SWT#ERROR}</li>
+	 * <li>{@link SWT#PAUSED}</li>
+	 * </ul>
+	 * 
+	 * @return the state
+	 * 
+	 * @exception SWTException
+	 *                <ul>
+	 *                <li>ERROR_WIDGET_DISPOSED - if the receiver has been
+	 *                disposed</li>
+	 *                <li>ERROR_THREAD_INVALID_ACCESS - if not called from the
+	 *                thread that created the receiver</li>
+	 *                </ul>
+	 * 
+	 * @since 3.4
+	 */
+	public int getState() {
+		// TODO
+		return 0;
+	}
+
+	/**
+	 * Sets the maximum value that the receiver will allow. This new value will
+	 * be ignored if it is not greater than the receiver's current minimum
+	 * value. If the new maximum is applied then the receiver's selection value
+	 * will be adjusted if necessary to fall within its new range.
+	 * 
+	 * @param value
+	 *            the new maximum, which must be greater than the current
+	 *            minimum
+	 * 
+	 * @exception SWTException
+	 *                <ul>
+	 *                <li>ERROR_WIDGET_DISPOSED - if the receiver has been
+	 *                disposed</li>
+	 *                <li>ERROR_THREAD_INVALID_ACCESS - if not called from the
+	 *                thread that created the receiver</li>
+	 *                </ul>
+	 */
+	public void setMaximum(int value) {
+		// TODO
+	}
+
+	/**
+	 * Sets the minimum value that the receiver will allow. This new value will
+	 * be ignored if it is negative or is not less than the receiver's current
+	 * maximum value. If the new minimum is applied then the receiver's
+	 * selection value will be adjusted if necessary to fall within its new
+	 * range.
+	 * 
+	 * @param value
+	 *            the new minimum, which must be nonnegative and less than the
+	 *            current maximum
+	 * 
+	 * @exception SWTException
+	 *                <ul>
+	 *                <li>ERROR_WIDGET_DISPOSED - if the receiver has been
+	 *                disposed</li>
+	 *                <li>ERROR_THREAD_INVALID_ACCESS - if not called from the
+	 *                thread that created the receiver</li>
+	 *                </ul>
+	 */
+	public void setMinimum(int value) {
+		// TODO
+	}
+
+	/**
+	 * Sets the single 'selection' that is the receiver's position to the
+	 * argument which must be greater than or equal to zero.
+	 * 
+	 * @param value
+	 *            the new selection (must be zero or greater)
+	 * 
+	 * @exception SWTException
+	 *                <ul>
+	 *                <li>ERROR_WIDGET_DISPOSED - if the receiver has been
+	 *                disposed</li>
+	 *                <li>ERROR_THREAD_INVALID_ACCESS - if not called from the
+	 *                thread that created the receiver</li>
+	 *                </ul>
+	 */
+	public void setSelection(int value) {
+		// TODO
+	}
+
+	/**
+	 * Sets the state of the receiver. The state must be one of these values:
+	 * <ul>
+	 * <li>{@link SWT#NORMAL}</li>
+	 * <li>{@link SWT#ERROR}</li>
+	 * <li>{@link SWT#PAUSED}</li>
+	 * </ul>
+	 * <p>
+	 * Note: This operation is a hint and is not supported on platforms that do
+	 * not have this concept.
+	 * </p>
+	 * 
+	 * @param state
+	 *            the new state
+	 * 
+	 * @exception SWTException
+	 *                <ul>
+	 *                <li>ERROR_WIDGET_DISPOSED - if the receiver has been
+	 *                disposed</li>
+	 *                <li>ERROR_THREAD_INVALID_ACCESS - if not called from the
+	 *                thread that created the receiver</li>
+	 *                </ul>
+	 * 
+	 * @since 3.4
+	 */
+	public void setState(int state) {
+		// TODO
 	}
 
 }

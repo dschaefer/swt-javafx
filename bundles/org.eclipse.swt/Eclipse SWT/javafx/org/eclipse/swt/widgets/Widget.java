@@ -11,7 +11,7 @@
 package org.eclipse.swt.widgets;
 
 import javafx.scene.Node;
-import javafx.scene.layout.Pane;
+import javafx.scene.control.Label;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
@@ -50,17 +50,19 @@ public abstract class Widget {
 
 	int style;
 	Widget parent;
-	Display display;
 	EventTable eventTable;
 	
 	// JavaFX root node for this widget
 	Node node;
+	
+	Display display;
 
 	/* Default size for widgets */
 	static final int DEFAULT_WIDTH	= 64;
 	static final int DEFAULT_HEIGHT	= 64;
 
 	Widget() {
+		display = getDisplay();
 		// TODO
 	}
 
@@ -103,8 +105,18 @@ public abstract class Widget {
 		this.parent = parent;
 		this.style = style;
 		
-		if (parent != null)
-			display = parent.display;
+		display = getDisplay();
+	}
+
+	void createNode() {
+		// TODO until we override everywhere
+		javafx.scene.control.Label todoLabel = new Label("TODO");
+		setNode(todoLabel);
+	}
+	
+	void setNode(Node node) {
+		this.node = node;
+		node.setUserData(this);
 	}
 
 	/**
@@ -364,8 +376,7 @@ public abstract class Widget {
 	 *                </ul>
 	 */
 	public Display getDisplay() {
-		// TODO
-		return null;
+		return Display.getDefault();
 	}
 
 	/**
@@ -738,11 +749,4 @@ public abstract class Widget {
 		// TODO
 	}
 
-	void setNode(Node node) {
-		this.node = node;
-		
-		// Add it to parent if it's a Pane
-		if (parent != null && parent.node instanceof Pane)
-			((Pane)parent.node).getChildren().add(node);
-	}
 }

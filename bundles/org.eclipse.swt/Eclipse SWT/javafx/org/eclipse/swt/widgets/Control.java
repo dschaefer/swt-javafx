@@ -10,6 +10,8 @@
  *******************************************************************************/
 package org.eclipse.swt.widgets;
 
+import javafx.scene.Node;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.accessibility.Accessible;
@@ -72,8 +74,6 @@ import org.eclipse.swt.graphics.Region;
  */
 public abstract class Control extends Widget implements Drawable {
 
-	Composite parent;
-
 	/**
 	 * Constructs a new instance of this class given its parent and a style
 	 * value describing its behavior and appearance.
@@ -115,6 +115,14 @@ public abstract class Control extends Widget implements Drawable {
 		// TODO
 	}
 
+	@Override
+	void setNode(Node node) {
+		super.setNode(node);
+		
+		if (parent != null)
+			((Composite)parent).addChild(this);
+	}
+	
 	/**
 	 * Returns the orientation of the receiver, which will be one of the
 	 * constants <code>SWT.LEFT_TO_RIGHT</code> or
@@ -221,7 +229,7 @@ public abstract class Control extends Widget implements Drawable {
 	 */
 	public Point computeSize(int wHint, int hHint) {
 		// TODO
-		return null;
+		return new Point(0, 0);
 	}
 
 	/**
@@ -457,7 +465,7 @@ public abstract class Control extends Widget implements Drawable {
 	 */
 	public Point getSize() {
 		// TODO
-		return null;
+		return new Point(0, 0);
 	}
 
 	/**
@@ -1807,7 +1815,7 @@ public abstract class Control extends Widget implements Drawable {
 	 */
 	public Font getFont() {
 		// TODO
-		return null;
+		return getDisplay().getSystemFont();
 	}
 
 	/**
@@ -1884,8 +1892,8 @@ public abstract class Control extends Widget implements Drawable {
 	 * @since 3.0
 	 */
 	public Monitor getMonitor() {
-		// TODO
-		return null;
+		// TODO need to create the Monitor object and fill in the fields if we can
+		return new Monitor();
 	}
 
 	/**
@@ -1947,8 +1955,10 @@ public abstract class Control extends Widget implements Drawable {
 	 * @see #getParent
 	 */
 	public Shell getShell() {
-		// TODO
-		return null;
+		Widget p = parent;
+		while (p != null && !(p instanceof Shell))
+			p = p.parent;
+		return (Shell)p;
 	}
 
 	/**

@@ -424,7 +424,7 @@ public final class Image extends Resource implements Drawable {
 	 */
 	public Rectangle getBounds() {
 		// TODO
-		return null;
+		return new Rectangle(0, 0, 0, 0);
 	}
 
 	/**

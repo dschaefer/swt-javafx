@@ -255,20 +255,13 @@ public class Shell extends Decorations {
 	 */
 	public Shell(Display display, int style) {
 		super(null, style);
-		if (display != null) {
-			this.display = display;
-		} else {
-			this.display = Display.getCurrent();
-			if (this.display == null)
-				this.display = Display.getDefault();
-		}
 
 		init();
 	}
 
 	void init() {
 		if (!Platform.isFxApplicationThread()) {
-			this.display.syncExec(new Runnable() {
+			getDisplay().syncExec(new Runnable() {
 				@Override
 				public void run() {
 					init();
@@ -326,7 +319,7 @@ public class Shell extends Decorations {
 	 *                </ul>
 	 */
 	public Shell(Shell parent) {
-		this(parent.display, SWT.DIALOG_TRIM);
+		super(null, SWT.DIALOG_TRIM);
 	}
 
 	/**
@@ -383,7 +376,7 @@ public class Shell extends Decorations {
 	 * @see SWT#SHEET
 	 */
 	public Shell(Shell parent, int style) {
-		this(parent.display, style);
+		super(null, style);
 	}
 
 	/**
@@ -620,7 +613,7 @@ public class Shell extends Decorations {
 	 */
 	public void open() {
 		if (!Platform.isFxApplicationThread()) {
-			display.syncExec(new Runnable() {
+			getDisplay().syncExec(new Runnable() {
 				@Override
 				public void run() {
 					open();
