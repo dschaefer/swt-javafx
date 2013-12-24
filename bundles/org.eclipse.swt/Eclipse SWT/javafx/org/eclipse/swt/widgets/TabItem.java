@@ -10,6 +10,9 @@
  *******************************************************************************/
 package org.eclipse.swt.widgets;
 
+import javafx.application.Platform;
+import javafx.scene.control.Tab;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.graphics.Rectangle;
@@ -35,6 +38,8 @@ import org.eclipse.swt.graphics.Rectangle;
  */
 public class TabItem extends Item {
 
+	Tab tab;
+	
 	/**
 	 * Constructs a new instance of this class given its parent (which must be a
 	 * <code>TabFolder</code>) and a style value describing its behavior and
@@ -73,7 +78,7 @@ public class TabItem extends Item {
 	 */
 	public TabItem(TabFolder parent, int style) {
 		super(parent, style);
-		// TODO
+		init();
 	}
 
 	/**
@@ -118,7 +123,22 @@ public class TabItem extends Item {
 	 */
 	public TabItem(TabFolder parent, int style, int index) {
 		super(parent, style);
-		// TODO
+		init();
+	}
+
+	private void init() {
+		if (!Platform.isFxApplicationThread()) {
+			getDisplay().syncExec(new Runnable() {
+				@Override
+				public void run() {
+					init();
+				}
+			});
+			return;
+		}
+		
+		tab = new Tab();
+		((TabFolder)parent).addItem(this);
 	}
 
 	/**
@@ -253,7 +273,7 @@ public class TabItem extends Item {
 	 */
 	@Override
 	public void setText(String string) {
-		// TODO
+		tab.setText(string);
 	}
 
 	/**

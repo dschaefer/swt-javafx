@@ -10,6 +10,8 @@
  *******************************************************************************/
 package org.eclipse.swt.widgets;
 
+import javafx.scene.control.TabPane;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.events.SelectionEvent;
@@ -90,6 +92,25 @@ public class TabFolder extends Composite {
 	 */
 	public TabFolder(Composite parent, int style) {
 		super(parent, style);
+	}
+
+	@Override
+	void createNode() {
+		TabPane pane = new TabPane();
+		setNode(pane);
+	}
+	
+	void addItem(TabItem item) {
+		getTabPane().getTabs().add(item.tab);
+	}
+	
+	@Override
+	void addChild(Control child) {
+		// JavaFX doesn't record the child controls here. They go only on the Tabs.
+	}
+	
+	private TabPane getTabPane() {
+		return (TabPane)node;
 	}
 
 	/**

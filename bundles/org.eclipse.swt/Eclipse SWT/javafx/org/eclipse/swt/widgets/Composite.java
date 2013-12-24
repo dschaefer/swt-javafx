@@ -321,6 +321,7 @@ public class Composite extends Scrollable {
 	private Pane getNode() {
 		return (Pane)node;
 	}
+
 	/**
 	 * Returns <code>true</code> if the receiver or any ancestor up to and
 	 * including the receiver's nearest ancestor shell has deferred the
