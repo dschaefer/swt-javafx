@@ -10,6 +10,11 @@
  *******************************************************************************/
 package org.eclipse.swt.widgets;
 
+import javafx.scene.control.ButtonBase;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.events.SelectionEvent;
@@ -51,6 +56,8 @@ import org.eclipse.swt.graphics.Image;
  */
 public class Button extends Control {
 
+	ToggleGroup toggleGroup;
+	
 	/**
 	 * Constructs a new instance of this class given its parent and a style
 	 * value describing its behavior and appearance.
@@ -97,11 +104,37 @@ public class Button extends Control {
 	 */
 	public Button(Composite parent, int style) {
 		super(parent, style);
-		setNode(new javafx.scene.control.Button());
+
+		ButtonBase button;
+		
+		switch (style) {
+		case SWT.RADIO:
+			RadioButton radioButton = new RadioButton();
+			Control[] siblings = parent.getChildren();
+			if (siblings != null && siblings.length > 0) {
+				Control last = siblings[siblings.length - 1];
+				if (last instanceof Button)
+					toggleGroup = ((Button)last).toggleGroup;
+			}
+			if (toggleGroup == null) {
+				toggleGroup = new ToggleGroup();
+				radioButton.setSelected(true);
+			}
+			radioButton.setToggleGroup(toggleGroup);
+			button = radioButton;
+			break;
+		case SWT.CHECK:
+			button = new CheckBox();
+			break;
+		default:
+			button = new javafx.scene.control.Button();
+		}
+		
+		setNode(button);
 	}
 
-	javafx.scene.control.Button getButton() {
-		return (javafx.scene.control.Button)node;
+	ButtonBase getButton() {
+		return (ButtonBase)node;
 	}
 	
 	/**
