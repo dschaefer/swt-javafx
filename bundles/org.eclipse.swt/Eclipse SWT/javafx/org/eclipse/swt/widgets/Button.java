@@ -107,8 +107,7 @@ public class Button extends Control {
 
 		ButtonBase button;
 		
-		switch (style) {
-		case SWT.RADIO:
+		if ((style & SWT.RADIO) != 0) {
 			RadioButton radioButton = new RadioButton();
 			Control[] siblings = parent.getChildren();
 			if (siblings != null && siblings.length > 0) {
@@ -122,11 +121,9 @@ public class Button extends Control {
 			}
 			radioButton.setToggleGroup(toggleGroup);
 			button = radioButton;
-			break;
-		case SWT.CHECK:
+		} else if ((style & SWT.CHECK) != 0) { 
 			button = new CheckBox();
-			break;
-		default:
+		} else {
 			button = new javafx.scene.control.Button();
 		}
 		
