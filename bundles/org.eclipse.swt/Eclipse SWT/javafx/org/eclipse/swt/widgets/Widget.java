@@ -438,8 +438,7 @@ public abstract class Widget {
 	 *                </ul>
 	 */
 	public int getStyle() {
-		// TODO
-		return 0;
+		return style;
 	}
 
 	/**

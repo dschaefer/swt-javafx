@@ -13,6 +13,7 @@ package org.eclipse.swt.widgets;
 import javafx.scene.control.ButtonBase;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 
 import org.eclipse.swt.SWT;
@@ -255,8 +256,12 @@ public class Button extends Control {
 	 *                </ul>
 	 */
 	public boolean getSelection() {
-		// TODO
-		return false;
+		if (node instanceof ToggleButton)
+			return ((ToggleButton)node).isSelected();
+		else if (node instanceof CheckBox)
+			return ((CheckBox)node).isSelected();
+		else
+			return false;
 	}
 
 	/**
@@ -398,7 +403,10 @@ public class Button extends Control {
 	 *                </ul>
 	 */
 	public void setSelection(boolean selected) {
-		// TODO
+		if (node instanceof ToggleButton)
+			((ToggleButton)node).setSelected(selected);
+		else if (node instanceof CheckBox)
+			((CheckBox)node).setSelected(selected);
 	}
 
 	/**
