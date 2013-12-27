@@ -25,9 +25,9 @@ public class GridPaneLayout extends PaneLayout {
 
 	@Override
 	public void addChild(Node child) {
-		getGridPane().add(child, currCol, currRow);
+		getGridPane().add(child, currCol++, currRow);
 		
-		if (currCol++ > layout.numColumns) {
+		if (currCol > layout.numColumns) {
 			currCol = 1;
 			currRow++;
 		}
