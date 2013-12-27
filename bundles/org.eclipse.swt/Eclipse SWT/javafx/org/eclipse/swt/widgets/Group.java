@@ -10,8 +10,7 @@
  *******************************************************************************/
 package org.eclipse.swt.widgets;
 
-import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.TitledPane;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
@@ -43,9 +42,6 @@ import org.eclipse.swt.SWTException;
  */
 public class Group extends Composite {
 
-	VBox vbox;
-	Label label;
-	
 	/**
 	 * Constructs a new instance of this class given its parent and a style
 	 * value describing its behavior and appearance.
@@ -90,19 +86,19 @@ public class Group extends Composite {
 	
 	@Override
 	void createNode() {
-		vbox = new VBox();
-		
-		if (label == null)
-			label = new Label();
-		
-		vbox.getChildren().add(label);
-		setNode(vbox);
+		TitledPane titledPane = new TitledPane();
+		titledPane.setCollapsible(false);
+		setNode(titledPane);
 	}
-
+	
+	TitledPane getTitledPane() {
+		return (TitledPane)node;
+	}
+	
 	@Override
 	void createPane() {
 		convertLayout();
-		vbox.getChildren().add(paneLayout.getPane());
+		getTitledPane().setContent(paneLayout.getPane());
 	}
 	
 	/**
@@ -121,9 +117,7 @@ public class Group extends Composite {
 	 *                </ul>
 	 */
 	public String getText() {
-		if (label == null)
-			return null;
-		return label.getText();
+		return getTitledPane().getText();
 	}
 
 	/**
@@ -153,9 +147,7 @@ public class Group extends Composite {
 	 *                </ul>
 	 */
 	public void setText(String string) {
-		if (label == null)
-			label = new Label();
-		label.setText(string);
+		getTitledPane().setText(string);
 	}
 
 }
