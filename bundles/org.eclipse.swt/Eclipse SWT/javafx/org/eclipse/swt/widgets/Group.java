@@ -10,7 +10,6 @@
  *******************************************************************************/
 package org.eclipse.swt.widgets;
 
-import javafx.application.Platform;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
@@ -87,19 +86,6 @@ public class Group extends Composite {
 	 */
 	public Group(Composite parent, int style) {
 		super(parent, style);
-		init();
-	}
-	
-	private void init() {
-		if (!Platform.isFxApplicationThread()) {
-			getDisplay().syncExec(new Runnable() {
-				@Override
-				public void run() {
-					init();
-				}
-			});
-			return;
-		}
 	}
 	
 	@Override

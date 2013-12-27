@@ -10,7 +10,6 @@
  *******************************************************************************/
 package org.eclipse.swt.widgets;
 
-import javafx.application.Platform;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -104,23 +103,9 @@ public class Composite extends Scrollable {
 	 */
 	public Composite(Composite parent, int style) {
 		super(parent, style);
-		init();
-	}
-
-	private void init() {
-		if (!Platform.isFxApplicationThread()) {
-			display.syncExec(new Runnable() {
-				@Override
-				public void run() {
-					init();
-				}
-			});
-			return;
-		}
-		
 		createNode();
 	}
-	
+
 	@Override
 	void createNode() {
 		// Plain composites are just panes. They'll get created when the first child is added

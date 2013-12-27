@@ -10,13 +10,10 @@
  *******************************************************************************/
 package org.eclipse.swt.widgets;
 
-import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
@@ -257,20 +254,6 @@ public class Shell extends Decorations {
 	public Shell(Display display, int style) {
 		super(null, style);
 
-		init();
-	}
-
-	void init() {
-		if (!Platform.isFxApplicationThread()) {
-			getDisplay().syncExec(new Runnable() {
-				@Override
-				public void run() {
-					init();
-				}
-			});
-			return;
-		}
-		
 		if (Display.primaryShell == null) {
 			stage = Display.primaryStage;
 			Display.primaryShell = this;
@@ -279,16 +262,10 @@ public class Shell extends Decorations {
 			// TODO add to display list
 			stage = new Stage();
 		}
-		
-		stage.onCloseRequestProperty().set(new EventHandler<WindowEvent>() {
-			public void handle(WindowEvent arg0) {
-				dispose();
-			};
-		});
 	}
-	
+
 	@Override
-	void setNode(Node node) {
+	void setNode(final Node node) {
 		super.setNode(node);
 		stage.setScene(new Scene((Parent)node, 640, 480));
 	}
@@ -613,15 +590,6 @@ public class Shell extends Decorations {
 	 * @see Shell#forceActive
 	 */
 	public void open() {
-		if (!Platform.isFxApplicationThread()) {
-			getDisplay().syncExec(new Runnable() {
-				@Override
-				public void run() {
-					open();
-				}
-			});
-			return;
-		}
 		stage.show();
 	}
 

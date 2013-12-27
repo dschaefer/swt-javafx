@@ -10,8 +10,6 @@
  *******************************************************************************/
 package org.eclipse.swt.widgets;
 
-import javafx.application.Platform;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.graphics.Image;
@@ -96,19 +94,7 @@ public class Label extends Control {
 	 */
 	public Label(Composite parent, int style) {
 		super(parent, style);
-		init();
-	}
-
-	private void init() {
-		if (!Platform.isFxApplicationThread()) {
-			getDisplay().syncExec(new Runnable() {
-				@Override
-				public void run() {
-					init();
-				}
-			});
-			return;
-		}
+		
 		javafx.scene.control.Label label = new javafx.scene.control.Label();
 
 		switch (style) {
@@ -119,7 +105,7 @@ public class Label extends Control {
 		
 		setNode(label);
 	}
-	
+
 	private javafx.scene.control.Label getNode() {
 		return (javafx.scene.control.Label)node;
 	}

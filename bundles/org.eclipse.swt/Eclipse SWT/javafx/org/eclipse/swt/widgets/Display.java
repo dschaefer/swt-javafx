@@ -10,7 +10,6 @@
  *******************************************************************************/
 package org.eclipse.swt.widgets;
 
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 
@@ -99,20 +98,10 @@ import org.eclipse.swt.graphics.Rectangle;
 public class Display extends Device {
 
 	Tray tray;
-	static Stage primaryStage;
+	public static Stage primaryStage;
 	static Shell primaryShell;
 	static Object startupMutex = new Object();
 	static Display defaultDisplay;
-
-	public static class SWTApp extends Application {
-		@Override
-		public void start(Stage primaryStage) throws Exception {
-			Display.primaryStage = primaryStage;
-			synchronized (Display.startupMutex) {
-				Display.startupMutex.notifyAll();
-			}
-		}
-	}
 
 	/*
 	 * TEMPORARY CODE. Install the runnable that gets the current display. This
@@ -171,21 +160,6 @@ public class Display extends Device {
 	public Display(DeviceData data) {
 		super(data);
 		defaultDisplay = this;
-		synchronized (startupMutex) {
-			new Thread() {
-				@Override
-				public void run() {
-					Application.launch(SWTApp.class, new String[0]);
-				}
-			}.start();
-
-			try {
-				startupMutex.wait();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
 	}
 
 	/**
