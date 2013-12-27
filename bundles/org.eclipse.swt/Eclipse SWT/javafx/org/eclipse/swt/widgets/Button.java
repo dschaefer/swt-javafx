@@ -97,8 +97,13 @@ public class Button extends Control {
 	 */
 	public Button(Composite parent, int style) {
 		super(parent, style);
+		setNode(new javafx.scene.control.Button());
 	}
 
+	javafx.scene.control.Button getButton() {
+		return (javafx.scene.control.Button)node;
+	}
+	
 	/**
 	 * Adds the listener to the collection of listeners who will be notified
 	 * when the control is selected by the user, by sending it one of the
@@ -239,8 +244,7 @@ public class Button extends Control {
 	 *                </ul>
 	 */
 	public String getText() {
-		// TODO
-		return null;
+		return getButton().getText();
 	}
 
 	/**
@@ -404,7 +408,7 @@ public class Button extends Control {
 	 *                </ul>
 	 */
 	public void setText(String string) {
-		// TODO
+		getButton().setText(string);
 	}
 
 }

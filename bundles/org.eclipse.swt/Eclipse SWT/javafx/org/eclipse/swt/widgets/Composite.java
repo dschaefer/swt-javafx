@@ -11,13 +11,18 @@
 package org.eclipse.swt.widgets;
 
 import javafx.application.Platform;
-import javafx.collections.ObservableList;
-import javafx.scene.Node;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.internal.GridPaneLayout;
+import org.eclipse.swt.internal.PaneLayout;
+import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridLayout;
 
 /**
  * Instances of this class are controls which are capable of containing other
@@ -56,6 +61,10 @@ import org.eclipse.swt.graphics.GC;
  */
 public class Composite extends Scrollable {
 
+	Layout layout;
+	PaneLayout paneLayout;
+	Control[] children;
+	
 	/**
 	 * Constructs a new instance of this class given its parent and a style
 	 * value describing its behavior and appearance.
@@ -100,7 +109,7 @@ public class Composite extends Scrollable {
 
 	private void init() {
 		if (!Platform.isFxApplicationThread()) {
-			getDisplay().syncExec(new Runnable() {
+			display.syncExec(new Runnable() {
 				@Override
 				public void run() {
 					init();
@@ -108,18 +117,54 @@ public class Composite extends Scrollable {
 			});
 			return;
 		}
-
+		
 		createNode();
 	}
-
+	
 	@Override
 	void createNode() {
-		Pane pane = new Pane();
-		setNode(pane);
+		// Plain composites are just panes. They'll get created when the first child is added
+		// to give a chance for the layouts to get filled.
 	}
 	
+	void convertLayout() {
+		if (layout != null) {
+			if (layout instanceof FillLayout) {
+				if (((FillLayout)layout).type == SWT.VERTICAL) {
+					paneLayout = new PaneLayout(new VBox());
+				} else {
+					paneLayout = new PaneLayout(new HBox());
+				}
+				return;
+			} else if (layout instanceof GridLayout) {
+				paneLayout = new GridPaneLayout(new GridPane(), (GridLayout)layout);
+				return;
+			}
+		}
+
+		paneLayout = new PaneLayout(new Pane());
+	}
+	
+	void createPane() {
+		convertLayout();
+		setNode(paneLayout.getPane());
+	}
+
 	void addChild(Control child) {
-		getNode().getChildren().add(child.node);
+		if (paneLayout == null)
+			createPane();
+
+		paneLayout.addChild(child.node);
+		
+		if (children == null) {
+			children = new Control[1];
+			children[0] = child;
+		} else {
+			Control[] c = new Control[children.length + 1];
+			System.arraycopy(children, 0, c, 0, children.length);
+			c[children.length] = child;
+			children = c;
+		}
 	}
 	
 	/**
@@ -247,11 +292,6 @@ public class Composite extends Scrollable {
 	 *                </ul>
 	 */
 	public Control[] getChildren() {
-		ObservableList<Node> nodes = getNode().getChildren();
-		Control[] children = new Control[nodes.size()];
-		int i = 0;
-		for (Node node : nodes)
-			children[i] = (Control)node.getUserData();
 		return children;
 	}
 
@@ -316,10 +356,6 @@ public class Composite extends Scrollable {
 	public Control[] getTabList() {
 		// TODO
 		return null;
-	}
-
-	private Pane getNode() {
-		return (Pane)node;
 	}
 
 	/**
@@ -607,7 +643,7 @@ public class Composite extends Scrollable {
 	 *                </ul>
 	 */
 	public void setLayout(Layout layout) {
-		// TODO
+		this.layout = layout;
 	}
 
 	/**

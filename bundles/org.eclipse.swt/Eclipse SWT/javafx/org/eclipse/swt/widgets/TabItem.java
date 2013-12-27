@@ -10,7 +10,6 @@
  *******************************************************************************/
 package org.eclipse.swt.widgets;
 
-import javafx.application.Platform;
 import javafx.scene.control.Tab;
 
 import org.eclipse.swt.SWT;
@@ -77,8 +76,7 @@ public class TabItem extends Item {
 	 * @see Widget#getStyle
 	 */
 	public TabItem(TabFolder parent, int style) {
-		super(parent, style);
-		init();
+		this(parent, style, -1);
 	}
 
 	/**
@@ -123,19 +121,6 @@ public class TabItem extends Item {
 	 */
 	public TabItem(TabFolder parent, int style, int index) {
 		super(parent, style);
-		init();
-	}
-
-	private void init() {
-		if (!Platform.isFxApplicationThread()) {
-			getDisplay().syncExec(new Runnable() {
-				@Override
-				public void run() {
-					init();
-				}
-			});
-			return;
-		}
 		
 		tab = new Tab();
 		((TabFolder)parent).addItem(this);
@@ -240,7 +225,7 @@ public class TabItem extends Item {
 	 *                </ul>
 	 */
 	public void setControl(Control control) {
-		// TODO
+		tab.setContent(control.node);
 	}
 
 	/**

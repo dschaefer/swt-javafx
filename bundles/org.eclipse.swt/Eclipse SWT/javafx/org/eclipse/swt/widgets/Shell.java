@@ -12,8 +12,9 @@ package org.eclipse.swt.widgets;
 
 import javafx.application.Platform;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -279,17 +280,17 @@ public class Shell extends Decorations {
 			stage = new Stage();
 		}
 		
-		// TODO stow the root?
-		StackPane root = new StackPane();
-		stage.setScene(new Scene(root, 300, 250));
-		
 		stage.onCloseRequestProperty().set(new EventHandler<WindowEvent>() {
 			public void handle(WindowEvent arg0) {
 				dispose();
 			};
 		});
-		
-		setNode(root);
+	}
+	
+	@Override
+	void setNode(Node node) {
+		super.setNode(node);
+		stage.setScene(new Scene((Parent)node, 640, 480));
 	}
 	
 	/**

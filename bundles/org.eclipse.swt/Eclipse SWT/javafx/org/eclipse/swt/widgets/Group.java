@@ -11,7 +11,8 @@
 package org.eclipse.swt.widgets;
 
 import javafx.application.Platform;
-import javafx.scene.layout.Pane;
+import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
@@ -43,6 +44,9 @@ import org.eclipse.swt.SWTException;
  */
 public class Group extends Composite {
 
+	VBox vbox;
+	Label label;
+	
 	/**
 	 * Constructs a new instance of this class given its parent and a style
 	 * value describing its behavior and appearance.
@@ -96,12 +100,25 @@ public class Group extends Composite {
 			});
 			return;
 		}
+	}
+	
+	@Override
+	void createNode() {
+		vbox = new VBox();
 		
-		// TODO decide how to do this properly with the text bar
-		Pane pane = new Pane();
-		setNode(pane);
+		if (label == null)
+			label = new Label();
+		
+		vbox.getChildren().add(label);
+		setNode(vbox);
 	}
 
+	@Override
+	void createPane() {
+		convertLayout();
+		vbox.getChildren().add(paneLayout.getPane());
+	}
+	
 	/**
 	 * Returns the receiver's text, which is the string that the is used as the
 	 * <em>title</em>. If the text has not previously been set, returns an empty
@@ -118,8 +135,9 @@ public class Group extends Composite {
 	 *                </ul>
 	 */
 	public String getText() {
-		// TODO
-		return null;
+		if (label == null)
+			return null;
+		return label.getText();
 	}
 
 	/**
@@ -149,7 +167,9 @@ public class Group extends Composite {
 	 *                </ul>
 	 */
 	public void setText(String string) {
-		// TODO
+		if (label == null)
+			label = new Label();
+		label.setText(string);
 	}
 
 }
