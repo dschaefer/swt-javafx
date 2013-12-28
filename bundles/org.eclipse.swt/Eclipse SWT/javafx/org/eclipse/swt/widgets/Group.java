@@ -10,7 +10,8 @@
  *******************************************************************************/
 package org.eclipse.swt.widgets;
 
-import javafx.scene.control.TitledPane;
+import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
@@ -42,6 +43,9 @@ import org.eclipse.swt.SWTException;
  */
 public class Group extends Composite {
 
+	VBox vbox;
+	Label label;
+	
 	/**
 	 * Constructs a new instance of this class given its parent and a style
 	 * value describing its behavior and appearance.
@@ -86,19 +90,17 @@ public class Group extends Composite {
 	
 	@Override
 	void createNode() {
-		TitledPane titledPane = new TitledPane();
-		titledPane.setCollapsible(false);
-		setNode(titledPane);
-	}
-	
-	TitledPane getTitledPane() {
-		return (TitledPane)node;
+		vbox = new VBox();
+		vbox.setStyle("-fx-border-width: 1px; -fx-border-color: #222222; -fx-padding: 5;");
+		vbox.setFillWidth(true);
+		
+		setNode(vbox);
 	}
 	
 	@Override
 	void createPane() {
 		convertLayout();
-		getTitledPane().setContent(paneLayout.getPane());
+		vbox.getChildren().add(paneLayout.getPane());
 	}
 	
 	/**
@@ -117,7 +119,7 @@ public class Group extends Composite {
 	 *                </ul>
 	 */
 	public String getText() {
-		return getTitledPane().getText();
+		return label.getText();
 	}
 
 	/**
@@ -129,7 +131,6 @@ public class Group extends Composite {
 	 * focus is assigned to the first child of the group. On most platforms, the
 	 * mnemonic appears underlined but may be emphasised in a platform specific
 	 * manner. The mnemonic indicator character '&amp;' can be escaped by
-	 * doubling it in the string, causing a single '&amp;' to be displayed. </p>
 	 * 
 	 * @param string
 	 *            the new text
@@ -147,7 +148,11 @@ public class Group extends Composite {
 	 *                </ul>
 	 */
 	public void setText(String string) {
-		getTitledPane().setText(string);
+		label = new Label();
+		label.setStyle("-fx-padding: 2;");
+		label.setText(string);
+
+		vbox.getChildren().add(0, label);
 	}
 
 }

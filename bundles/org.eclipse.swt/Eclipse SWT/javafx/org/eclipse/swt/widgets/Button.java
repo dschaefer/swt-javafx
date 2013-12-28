@@ -15,6 +15,7 @@ import java.util.List;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.control.ButtonBase;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.RadioButton;
@@ -215,8 +216,20 @@ public class Button extends Control {
 	 *                </ul>
 	 */
 	public int getAlignment() {
-		// TODO
-		return 0;
+		if ((style & SWT.ARROW) == 0)
+			switch (getButton().getAlignment()) {
+			case CENTER_LEFT:
+				return SWT.LEFT;
+			case CENTER_RIGHT:
+				return SWT.RIGHT;
+			case CENTER:
+				return SWT.CENTER;
+			default:
+				return 0;
+			}
+		else
+			// TODO Arrow direction
+			return 0;
 	}
 
 	/**
@@ -353,7 +366,16 @@ public class Button extends Control {
 	 *                </ul>
 	 */
 	public void setAlignment(int alignment) {
-		// TODO
+		if ((style & SWT.ARROW) == 0) {
+			if ((alignment & SWT.LEFT) != 0)
+				getButton().setAlignment(Pos.CENTER_LEFT);
+			else if ((alignment & SWT.RIGHT) != 0)
+				getButton().setAlignment(Pos.CENTER_RIGHT);
+			else if ((alignment & SWT.CENTER) != 0)
+				getButton().setAlignment(Pos.CENTER);
+		} else {
+			// TODO Arrow direction
+		}
 	}
 
 	/**
