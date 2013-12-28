@@ -287,7 +287,7 @@ public abstract class Widget {
 	 * @see #checkWidget
 	 */
 	public void dispose() {
-		// TODO
+		node = null;
 	}
 
 	boolean drawGripper (GC gc, int x, int y, int width, int height, boolean vertical) {

@@ -575,7 +575,7 @@ public class Combo extends Composite {
 	 */
 	public String getText() {
 		// TODO
-		return null;
+		return "TODO";
 	}
 
 	/**

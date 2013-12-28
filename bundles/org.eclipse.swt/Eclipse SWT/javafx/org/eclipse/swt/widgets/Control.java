@@ -123,6 +123,13 @@ public abstract class Control extends Widget implements Drawable {
 			((Composite)parent).addChild(this);
 	}
 	
+	@Override
+	public void dispose() {
+		if (parent != null)
+			((Composite)parent).removeChild(this);
+		super.dispose();
+	}
+	
 	/**
 	 * Returns the orientation of the receiver, which will be one of the
 	 * constants <code>SWT.LEFT_TO_RIGHT</code> or

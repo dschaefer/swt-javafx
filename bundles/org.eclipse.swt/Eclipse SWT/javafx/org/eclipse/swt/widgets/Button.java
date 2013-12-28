@@ -10,6 +10,11 @@
  *******************************************************************************/
 package org.eclipse.swt.widgets;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.ButtonBase;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.RadioButton;
@@ -58,6 +63,7 @@ import org.eclipse.swt.graphics.Image;
 public class Button extends Control {
 
 	ToggleGroup toggleGroup;
+	List<SelectionListener> selectionListeners;
 	
 	/**
 	 * Constructs a new instance of this class given its parent and a style
@@ -127,7 +133,20 @@ public class Button extends Control {
 		} else {
 			button = new javafx.scene.control.Button();
 		}
-		
+
+		button.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent actionEvent) {
+				Event event = new Event();
+				event.widget = event.item = Button.this;
+				SelectionEvent se = new SelectionEvent(event);
+				
+				if (selectionListeners != null)
+					for (SelectionListener listener : selectionListeners)
+						listener.widgetSelected(se);
+			}
+		});
+
 		setNode(button);
 	}
 
@@ -172,7 +191,9 @@ public class Button extends Control {
 	 * @see SelectionEvent
 	 */
 	public void addSelectionListener(SelectionListener listener) {
-		// TODO
+		if (selectionListeners == null)
+			selectionListeners = new LinkedList<>();
+		selectionListeners.add(listener);
 	}
 
 	/**
@@ -305,7 +326,11 @@ public class Button extends Control {
 	 * @see #addSelectionListener
 	 */
 	public void removeSelectionListener(SelectionListener listener) {
-		// TODO
+		if (selectionListeners != null) {
+			selectionListeners.remove(listener);
+			if (selectionListeners.isEmpty())
+				selectionListeners = null;
+		}
 	}
 
 	/**

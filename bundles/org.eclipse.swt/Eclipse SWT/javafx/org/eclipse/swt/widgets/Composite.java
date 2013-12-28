@@ -152,6 +152,20 @@ public class Composite extends Scrollable {
 		}
 	}
 	
+	void removeChild(Control child) {
+		if (paneLayout != null)
+			paneLayout.removeChild(child.node);
+
+		if (children != null)
+			for (int i = 0; i < children.length; ++i)
+				if (children[i] == child) {
+					Control[] c = new Control[children.length - 1];
+					System.arraycopy(children, 0, children, 0, i);
+					System.arraycopy(children, i + 1, c, i, children.length - i - 1);
+					break;
+				}
+	}
+	
 	/**
 	 * Clears any data that has been cached by a Layout for all widgets that are
 	 * in the parent hierarchy of the changed control up to and including the

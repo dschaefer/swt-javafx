@@ -15,6 +15,10 @@ public class PaneLayout {
 		pane.getChildren().add(child);
 	}
 
+	public void removeChild(Node child) {
+		pane.getChildren().remove(child);
+	}
+
 	public Pane getPane() {
 		return pane;
 	}
