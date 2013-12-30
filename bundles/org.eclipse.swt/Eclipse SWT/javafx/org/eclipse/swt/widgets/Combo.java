@@ -10,6 +10,11 @@
  *******************************************************************************/
 package org.eclipse.swt.widgets;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+
+import javafx.scene.control.ComboBox;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.events.ModifyListener;
@@ -64,7 +69,10 @@ public class Combo extends Composite {
 	 * the operating system limit for the number of characters
 	 * that the text field in an instance of this class can hold
 	 */
-	public final static int LIMIT = 0; // TODO
+	public final static int LIMIT = 1000; // TODO
+	private LinkedList<SelectionListener> selectionListeners;
+	private LinkedList<VerifyListener> verifyListeners;
+	private LinkedList<ModifyListener> modifyListeners;
 
 	/**
 	 * Constructs a new instance of this class given its parent and a style
@@ -104,6 +112,12 @@ public class Combo extends Composite {
 	 */
 	public Combo(Composite parent, int style) {
 		super(parent, style);
+		ComboBox<String> comboBox = new ComboBox<String>();
+		if ((style & SWT.READ_ONLY) !=0) comboBox.setEditable(false);
+		else comboBox.setEditable(true);
+		if ((style & SWT.SIMPLE)!=0) throw new IllegalArgumentException("SWT.SIMPLE NOT IMPLEMENTED YET");
+		//TODO - implement listener calls
+		setNode(comboBox);
 	}
 
 	/**
@@ -127,7 +141,7 @@ public class Combo extends Composite {
 	 * @see #add(String,int)
 	 */
 	public void add(String string) {
-		// TODO
+		add(string, getCombo().getItems().size());
 	}
 
 	/**
@@ -160,7 +174,7 @@ public class Combo extends Composite {
 	 * @see #add(String)
 	 */
 	public void add(String string, int index) {
-		// TODO
+		getCombo().getItems().add(index, string);
 	}
 
 	/**
@@ -187,7 +201,9 @@ public class Combo extends Composite {
 	 * @see #removeModifyListener
 	 */
 	public void addModifyListener(ModifyListener listener) {
-		// TODO
+		if (modifyListeners == null)
+			modifyListeners = new LinkedList<>();
+		modifyListeners.add(listener);
 	}
 
 	/**
@@ -220,7 +236,9 @@ public class Combo extends Composite {
 	 * @see SelectionEvent
 	 */
 	public void addSelectionListener(SelectionListener listener) {
-		// TODO
+		if (selectionListeners == null)
+			selectionListeners = new LinkedList<>();
+		selectionListeners.add(listener);
 	}
 
 	/**
@@ -249,7 +267,9 @@ public class Combo extends Composite {
 	 * @since 3.1
 	 */
 	public void addVerifyListener(VerifyListener listener) {
-		// TODO
+		if (verifyListeners == null)
+			verifyListeners = new LinkedList<>();
+		verifyListeners.add(listener);
 	}
 
 	/**
@@ -272,7 +292,7 @@ public class Combo extends Composite {
 	 * @see #deselectAll
 	 */
 	public void clearSelection() {
-		// TODO
+		getCombo().getEditor().clear();
 	}
 
 	/**
@@ -333,7 +353,7 @@ public class Combo extends Composite {
 	 *                </ul>
 	 */
 	public void deselect(int index) {
-		// TODO
+		getCombo().getSelectionModel().clearSelection(index);
 	}
 
 	/**
@@ -354,7 +374,7 @@ public class Combo extends Composite {
 	 * @see #clearSelection
 	 */
 	public void deselectAll() {
-		// TODO
+		getCombo().getSelectionModel().clearSelection();
 	}
 
 	/**
@@ -374,8 +394,7 @@ public class Combo extends Composite {
 	 * @since 3.8
 	 */
 	public Point getCaretLocation() {
-		// TODO
-		return null;
+		return null;//TODO
 	}
 
 	/**
@@ -397,8 +416,7 @@ public class Combo extends Composite {
 	 * @since 3.8
 	 */
 	public int getCaretPosition() {
-		// TODO
-		return 0;
+		return getCombo().getEditor().getCaretPosition();
 	}
 
 	/**
@@ -424,8 +442,7 @@ public class Combo extends Composite {
 	 *                </ul>
 	 */
 	public String getItem(int index) {
-		// TODO
-		return null;
+		return getCombo().getItems().get(index);
 	}
 
 	/**
@@ -442,8 +459,8 @@ public class Combo extends Composite {
 	 *                </ul>
 	 */
 	public int getItemCount() {
-		// TODO
-		return 0;
+		
+		return getCombo().getItems().size();
 	}
 
 	/**
@@ -484,8 +501,8 @@ public class Combo extends Composite {
 	 *                </ul>
 	 */
 	public String[] getItems() {
-		// TODO
-		return null;
+		
+		return (String[]) getCombo().getItems().toArray();
 	}
 
 	/**
@@ -555,8 +572,7 @@ public class Combo extends Composite {
 	 *                </ul>
 	 */
 	public int getSelectionIndex() {
-		// TODO
-		return 0;
+		return getCombo().getSelectionModel().getSelectedIndex();
 	}
 
 	/**
@@ -574,8 +590,7 @@ public class Combo extends Composite {
 	 *                </ul>
 	 */
 	public String getText() {
-		// TODO
-		return "TODO";
+		return getCombo().getEditor().getText();
 	}
 
 	/**
@@ -615,8 +630,7 @@ public class Combo extends Composite {
 	 * @see #LIMIT
 	 */
 	public int getTextLimit() {
-		// TODO
-		return 0;
+		return LIMIT;
 	}
 
 	/**
@@ -640,8 +654,7 @@ public class Combo extends Composite {
 	 * @since 3.0
 	 */
 	public int getVisibleItemCount() {
-		// TODO
-		return 0;
+		return getCombo().getVisibleRowCount();
 	}
 
 	/**
@@ -666,8 +679,7 @@ public class Combo extends Composite {
 	 *                </ul>
 	 */
 	public int indexOf(String string) {
-		// TODO
-		return 0;
+		return getCombo().getItems().indexOf(string);
 	}
 
 	/**
@@ -742,7 +754,7 @@ public class Combo extends Composite {
 	 *                </ul>
 	 */
 	public void remove(int index) {
-		// TODO
+		getCombo().getItems().remove(index);
 	}
 
 	/**
@@ -769,7 +781,7 @@ public class Combo extends Composite {
 	 *                </ul>
 	 */
 	public void remove(int start, int end) {
-		// TODO
+		getCombo().getItems().remove(start, end);
 	}
 
 	/**
@@ -794,7 +806,7 @@ public class Combo extends Composite {
 	 *                </ul>
 	 */
 	public void remove(String string) {
-		// TODO
+		getCombo().getItems().remove(string);
 	}
 
 	/**
@@ -810,7 +822,8 @@ public class Combo extends Composite {
 	 *                </ul>
 	 */
 	public void removeAll() {
-		// TODO
+		getCombo().getItems().clear();
+		getCombo().getEditor().clear();
 	}
 
 	/**
@@ -836,7 +849,11 @@ public class Combo extends Composite {
 	 * @see #addModifyListener
 	 */
 	public void removeModifyListener(ModifyListener listener) {
-		// TODO
+		if (modifyListeners != null) {
+			modifyListeners.remove(listener);
+			if (modifyListeners.isEmpty())
+				modifyListeners = null;
+		}
 	}
 
 	/**
@@ -862,7 +879,11 @@ public class Combo extends Composite {
 	 * @see #addSelectionListener
 	 */
 	public void removeSelectionListener(SelectionListener listener) {
-		// TODO
+		if (selectionListeners != null) {
+			selectionListeners.remove(listener);
+			if (selectionListeners.isEmpty())
+				selectionListeners = null;
+		}
 	}
 
 	/**
@@ -890,7 +911,11 @@ public class Combo extends Composite {
 	 * @since 3.1
 	 */
 	public void removeVerifyListener(VerifyListener listener) {
-		// TODO
+		if (verifyListeners != null) {
+			verifyListeners.remove(listener);
+			if (verifyListeners.isEmpty())
+				verifyListeners = null;
+		}
 	}
 
 	/**
@@ -910,7 +935,7 @@ public class Combo extends Composite {
 	 *                </ul>
 	 */
 	public void select(int index) {
-		// TODO
+		getCombo().getSelectionModel().select(index);
 	}
 
 	/**
@@ -938,7 +963,7 @@ public class Combo extends Composite {
 	 *                </ul>
 	 */
 	public void setItem(int index, String string) {
-		// TODO
+		getCombo().getItems().set(index, string);
 	}
 
 	/**
@@ -962,7 +987,7 @@ public class Combo extends Composite {
 	 *                </ul>
 	 */
 	public void setItems(String[] items) {
-		// TODO
+		getCombo().getItems().setAll(Arrays.asList(items));
 	}
 
 	/**
@@ -1044,7 +1069,7 @@ public class Combo extends Composite {
 	 *                </ul>
 	 */
 	public void setText(String string) {
-		// TODO
+		getCombo().getEditor().setText(string);
 	}
 
 	/**
@@ -1075,7 +1100,7 @@ public class Combo extends Composite {
 	 * @see #LIMIT
 	 */
 	public void setTextLimit(int limit) {
-		// TODO
+		//TODO
 	}
 
 	/**
@@ -1100,7 +1125,11 @@ public class Combo extends Composite {
 	 * @since 3.0
 	 */
 	public void setVisibleItemCount(int count) {
-		// TODO
+		getCombo().setVisibleRowCount(count);
 	}
-
+	
+	ComboBox<String> getCombo(){
+		return (ComboBox<String>) node;
+	}
+	
 }
