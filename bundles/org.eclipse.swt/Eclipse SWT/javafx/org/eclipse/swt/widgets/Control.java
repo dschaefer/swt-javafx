@@ -2382,7 +2382,7 @@ public abstract class Control extends Widget implements Drawable {
 	 *                </ul>
 	 */
 	public void setEnabled(boolean enabled) {
-		// TODO
+		node.setDisable(!enabled);
 	}
 
 	/**
@@ -2682,7 +2682,7 @@ public abstract class Control extends Widget implements Drawable {
 	 *                </ul>
 	 */
 	public void setVisible(boolean visible) {
-		// TODO
+		node.setVisible(visible);
 	}
 
 	/**
