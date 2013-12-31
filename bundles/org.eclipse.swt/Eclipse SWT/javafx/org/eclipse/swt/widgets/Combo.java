@@ -91,7 +91,6 @@ public class Combo extends Composite {
 	 * style constants. The class description lists the style constants that are
 	 * applicable to the class. Style bits are also inherited from superclasses.
 	 * </p>
-	 * @param <T>
 	 * 
 	 * @param parent
 	 *            a composite control which will be the parent of the new
@@ -117,7 +116,7 @@ public class Combo extends Composite {
 	 * @see Widget#checkSubclass
 	 * @see Widget#getStyle
 	 */
-	public <T> Combo(Composite parent, int style) {
+	public Combo(Composite parent, int style) {
 		super(parent, style);
 		ComboBox<String> comboBox = new ComboBox<String>();
 		if ((style & SWT.READ_ONLY) !=0) comboBox.setEditable(false);
@@ -1177,6 +1176,7 @@ public class Combo extends Composite {
 		getCombo().setVisibleRowCount(count);
 	}
 	
+	@SuppressWarnings("unchecked")
 	ComboBox<String> getCombo(){
 		return (ComboBox<String>) node;
 	}
