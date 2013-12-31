@@ -10,6 +10,8 @@
  *******************************************************************************/
 package org.eclipse.swt.widgets;
 
+import javafx.scene.text.TextAlignment;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.graphics.Image;
@@ -49,6 +51,10 @@ import org.eclipse.swt.graphics.Image;
  */
 public class Label extends Control {
 
+	int alignment;
+	String text;
+	private Image image;
+	
 	/**
 	 * Constructs a new instance of this class given its parent and a style
 	 * value describing its behavior and appearance.
@@ -96,13 +102,22 @@ public class Label extends Control {
 		super(parent, style);
 		
 		javafx.scene.control.Label label = new javafx.scene.control.Label();
-
-		switch (style) {
-		case SWT.CENTER:
-			label.setStyle("-fx-alignment: center;");
-			break;
-		}
 		
+		if ((style & SWT.SEPARATOR)!=0) alignment = SWT.NONE;
+		else {
+			if ((style & SWT.LEFT)  != 0) {
+				alignment = SWT.LEFT;
+				label.setTextAlignment(TextAlignment.LEFT);
+			}
+			else if ((style & SWT.RIGHT)  != 0) {
+					alignment = SWT.RIGHT;
+					label.setTextAlignment(TextAlignment.RIGHT);
+			}
+			else if ((style & SWT.CENTER)  != 0) {
+					alignment = SWT.CENTER;
+					label.setTextAlignment(TextAlignment.CENTER);
+			}
+		}
 		setNode(label);
 	}
 
@@ -127,8 +142,7 @@ public class Label extends Control {
 	 *                </ul>
 	 */
 	public int getAlignment() {
-		// TODO
-		return 0;
+		return alignment;
 	}
 
 	/**
@@ -145,8 +159,7 @@ public class Label extends Control {
 	 *                </ul>
 	 */
 	public Image getImage() {
-		// TODO
-		return null;
+		return image;
 	}
 
 	/**
@@ -164,8 +177,8 @@ public class Label extends Control {
 	 *                </ul>
 	 */
 	public String getText() {
-		// TODO
-		return null;
+		if ((getNode()==null) || ((style&SWT.SEPARATOR) != 0)) return "";
+		return getNode().getText()==null?"":getNode().getText();
 	}
 
 	/**
@@ -186,7 +199,15 @@ public class Label extends Control {
 	 *                </ul>
 	 */
 	public void setAlignment(int alignment) {
-		// TODO
+		this.alignment = alignment;
+		switch (alignment){
+			case SWT.CENTER: getNode().setTextAlignment(TextAlignment.CENTER);
+				break;
+			case SWT.LEFT: getNode().setTextAlignment(TextAlignment.LEFT);
+				break;
+			case SWT.RIGHT: getNode().setTextAlignment(TextAlignment.RIGHT);
+		}
+		
 	}
 
 	/**
@@ -210,7 +231,7 @@ public class Label extends Control {
 	 *                </ul>
 	 */
 	public void setImage(Image image) {
-		// TODO
+//		getNode().setGraphic(new ImageView(image.getImage()));
 	}
 
 	/**

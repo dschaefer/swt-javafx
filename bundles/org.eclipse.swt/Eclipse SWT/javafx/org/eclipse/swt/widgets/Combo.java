@@ -13,13 +13,19 @@ package org.eclipse.swt.widgets;
 import java.util.Arrays;
 import java.util.LinkedList;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.scene.control.ComboBox;
+import javafx.scene.input.KeyEvent;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
+import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Point;
 
@@ -85,6 +91,7 @@ public class Combo extends Composite {
 	 * style constants. The class description lists the style constants that are
 	 * applicable to the class. Style bits are also inherited from superclasses.
 	 * </p>
+	 * @param <T>
 	 * 
 	 * @param parent
 	 *            a composite control which will be the parent of the new
@@ -110,13 +117,52 @@ public class Combo extends Composite {
 	 * @see Widget#checkSubclass
 	 * @see Widget#getStyle
 	 */
-	public Combo(Composite parent, int style) {
+	public <T> Combo(Composite parent, int style) {
 		super(parent, style);
 		ComboBox<String> comboBox = new ComboBox<String>();
 		if ((style & SWT.READ_ONLY) !=0) comboBox.setEditable(false);
 		else comboBox.setEditable(true);
 		if ((style & SWT.SIMPLE)!=0) throw new IllegalArgumentException("SWT.SIMPLE NOT IMPLEMENTED YET");
-		//TODO - implement listener calls
+		comboBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> arg0,
+					String arg1, String arg2) {
+				Event event = new Event();
+				event.widget = event.item = Combo.this;
+				SelectionEvent se = new SelectionEvent(event);
+				if (selectionListeners != null)
+					for (SelectionListener listener : selectionListeners)
+						listener.widgetSelected(se);
+			}
+				
+		});
+		
+		comboBox.getEditor().textProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> arg0,
+					String arg1, String arg2) {
+				Event event = new Event();
+				event.widget = event.item = Combo.this;
+				ModifyEvent se = new ModifyEvent(event);
+				if (modifyListeners != null)
+					for (ModifyListener listener : modifyListeners)
+						listener.modifyText(se); 
+			}
+			
+		});
+		
+		comboBox.getEditor().setOnKeyPressed(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent event) {
+				Event plainEvent = new Event();
+				plainEvent.widget = Combo.this;
+				plainEvent.item = Combo.this;
+				if (verifyListeners!=null)
+					for (VerifyListener listener : verifyListeners)
+						listener.verifyText(new VerifyEvent(plainEvent));
+				
+			}
+		});
 		setNode(comboBox);
 	}
 
@@ -590,7 +636,10 @@ public class Combo extends Composite {
 	 *                </ul>
 	 */
 	public String getText() {
-		return getCombo().getEditor().getText();
+		String editableText = getCombo().getEditor().getText();
+		String ultimateEditableText = editableText==null?"":editableText;
+		String ultimateSelectedText = getCombo().getSelectionModel().getSelectedItem()==null?"":getCombo().getSelectionModel().getSelectedItem();
+		return getCombo().isEditable()?ultimateEditableText:ultimateSelectedText;
 	}
 
 	/**
