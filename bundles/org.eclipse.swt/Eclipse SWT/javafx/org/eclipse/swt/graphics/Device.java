@@ -382,6 +382,41 @@ public abstract class Device implements Drawable {
 	}
 
 	/**
+	 * Invokes platform specific functionality to allocate a new GC handle.
+	 * <p>
+	 * <b>IMPORTANT:</b> This method is <em>not</em> part of the public API for
+	 * <code>Device</code>. It is marked public only so that it can be shared
+	 * within the packages provided by SWT. It is not available on all
+	 * platforms, and should never be called from application code.
+	 * </p>
+	 * 
+	 * @param data
+	 *            the platform specific GC data
+	 * @return the platform specific GC handle
+	 * 
+	 * @noreference This method is not intended to be referenced by clients.
+	 */
+	public abstract long /* int */internal_new_GC(GCData data);
+
+	/**
+	 * Invokes platform specific functionality to dispose a GC handle.
+	 * <p>
+	 * <b>IMPORTANT:</b> This method is <em>not</em> part of the public API for
+	 * <code>Device</code>. It is marked public only so that it can be shared
+	 * within the packages provided by SWT. It is not available on all
+	 * platforms, and should never be called from application code.
+	 * </p>
+	 * 
+	 * @param hDC
+	 *            the platform specific GC handle
+	 * @param data
+	 *            the platform specific GC data
+	 * 
+	 * @noreference This method is not intended to be referenced by clients.
+	 */
+	public abstract void internal_dispose_GC(long /* int */hDC, GCData data);
+
+	/**
 	 * Returns <code>true</code> if the device has been disposed, and
 	 * <code>false</code> otherwise.
 	 * <p>

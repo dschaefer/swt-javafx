@@ -14,10 +14,12 @@ import javafx.application.Platform;
 import javafx.stage.Stage;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWTError;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.DeviceData;
+import org.eclipse.swt.graphics.GCData;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
@@ -1018,8 +1020,62 @@ public class Display extends Device {
 		return false;
 	}
 
+	/**
+	 * Invokes platform specific functionality to dispose a GC handle.
+	 * <p>
+	 * <b>IMPORTANT:</b> This method is <em>not</em> part of the public API for
+	 * <code>Display</code>. It is marked public only so that it can be shared
+	 * within the packages provided by SWT. It is not available on all
+	 * platforms, and should never be called from application code.
+	 * </p>
+	 * 
+	 * @param hDC
+	 *            the platform specific GC handle
+	 * @param data
+	 *            the platform specific GC data
+	 * 
+	 * @noreference This method is not intended to be referenced by clients.
+	 */
+	@Override
+	public void internal_dispose_GC(long /* int */hDC, GCData data) {
+		// TODO
+	}
+
+	/**
+	 * Invokes platform specific functionality to allocate a new GC handle.
+	 * <p>
+	 * <b>IMPORTANT:</b> This method is <em>not</em> part of the public API for
+	 * <code>Display</code>. It is marked public only so that it can be shared
+	 * within the packages provided by SWT. It is not available on all
+	 * platforms, and should never be called from application code.
+	 * </p>
+	 * 
+	 * @param data
+	 *            the platform specific GC data
+	 * @return the platform specific GC handle
+	 * 
+	 * @exception SWTException
+	 *                <ul>
+	 *                <li>ERROR_DEVICE_DISPOSED - if the receiver has been
+	 *                disposed</li>
+	 *                </ul>
+	 * @exception SWTError
+	 *                <ul>
+	 *                <li>ERROR_NO_HANDLES if a handle could not be obtained for
+	 *                gc creation</li>
+	 *                </ul>
+	 * 
+	 * @noreference This method is not intended to be referenced by clients.
+	 */
+	@Override
+	public long /* int */internal_new_GC(GCData data) {
+		// TODO
+		return 0;
+	}
+
 	boolean isValidThread() {
-		return Platform.isFxApplicationThread();
+		// TODO
+		return false;
 	}
 
 	/**

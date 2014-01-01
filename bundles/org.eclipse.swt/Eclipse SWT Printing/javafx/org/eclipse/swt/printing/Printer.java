@@ -13,6 +13,7 @@ package org.eclipse.swt.printing;
 import org.eclipse.swt.SWTError;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.graphics.Device;
+import org.eclipse.swt.graphics.GCData;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 
@@ -112,6 +113,47 @@ public final class Printer extends Device {
 	 */
 	public Printer(PrinterData data) {
 		super(data);
+	}
+
+	/**
+	 * Invokes platform specific functionality to allocate a new GC handle.
+	 * <p>
+	 * <b>IMPORTANT:</b> This method is <em>not</em> part of the public API for
+	 * <code>Printer</code>. It is marked public only so that it can be shared
+	 * within the packages provided by SWT. It is not available on all
+	 * platforms, and should never be called from application code.
+	 * </p>
+	 * 
+	 * @param data
+	 *            the platform specific GC data
+	 * @return the platform specific GC handle
+	 * 
+	 * @noreference This method is not intended to be referenced by clients.
+	 */
+	@Override
+	public long /* int */internal_new_GC(GCData data) {
+		return 0;
+	}
+
+	/**
+	 * Invokes platform specific functionality to dispose a GC handle.
+	 * <p>
+	 * <b>IMPORTANT:</b> This method is <em>not</em> part of the public API for
+	 * <code>Printer</code>. It is marked public only so that it can be shared
+	 * within the packages provided by SWT. It is not available on all
+	 * platforms, and should never be called from application code.
+	 * </p>
+	 * 
+	 * @param hDC
+	 *            the platform specific GC handle
+	 * @param data
+	 *            the platform specific GC data
+	 * 
+	 * @noreference This method is not intended to be referenced by clients.
+	 */
+	@Override
+	public void internal_dispose_GC(long /* int */hDC, GCData data) {
+		// TODO
 	}
 
 	/**
