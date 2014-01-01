@@ -459,8 +459,11 @@ public final class Image extends Resource implements Drawable {
 	 * @see ImageData
 	 */
 	public ImageData getImageData() {
-		// TODO
-		return null;
+		// TODO really?
+		return new ImageData(
+				(int)image.getWidth(), 
+				(int)image.getHeight(),
+				4, new PaletteData(0xff0000, 0xff00, 0xff));
 	}
 
 	/**

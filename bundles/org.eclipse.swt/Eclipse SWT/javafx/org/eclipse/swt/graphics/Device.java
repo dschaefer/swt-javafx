@@ -315,9 +315,8 @@ public abstract class Device implements Drawable {
 	 * @see SWT
 	 */
 	public Color getSystemColor(int id) {
-		checkDevice();
 		// TODO
-		return null;
+		return new Color(this, 0, 0, 0);
 	}
 
 	/**
