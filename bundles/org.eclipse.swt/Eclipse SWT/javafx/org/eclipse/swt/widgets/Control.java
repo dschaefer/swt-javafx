@@ -36,7 +36,6 @@ import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Drawable;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.graphics.GCData;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
@@ -2038,46 +2037,6 @@ public abstract class Control extends Widget implements Drawable {
 	public boolean getVisible() {
 		// TODO
 		return false;
-	}
-
-	/**
-	 * Invokes platform specific functionality to allocate a new GC handle.
-	 * <p>
-	 * <b>IMPORTANT:</b> This method is <em>not</em> part of the public API for
-	 * <code>Control</code>. It is marked public only so that it can be shared
-	 * within the packages provided by SWT. It is not available on all
-	 * platforms, and should never be called from application code.
-	 * </p>
-	 * 
-	 * @param data
-	 *            the platform specific GC data
-	 * @return the platform specific GC handle
-	 * 
-	 * @noreference This method is not intended to be referenced by clients.
-	 */
-	public long /* int */internal_new_GC(GCData data) {
-		// TODO
-		return 0;
-	}
-
-	/**
-	 * Invokes platform specific functionality to dispose a GC handle.
-	 * <p>
-	 * <b>IMPORTANT:</b> This method is <em>not</em> part of the public API for
-	 * <code>Control</code>. It is marked public only so that it can be shared
-	 * within the packages provided by SWT. It is not available on all
-	 * platforms, and should never be called from application code.
-	 * </p>
-	 * 
-	 * @param hDC
-	 *            the platform specific GC handle
-	 * @param data
-	 *            the platform specific GC data
-	 * 
-	 * @noreference This method is not intended to be referenced by clients.
-	 */
-	public void internal_dispose_GC(long /* int */hDC, GCData data) {
-		// TODO
 	}
 
 	/**
