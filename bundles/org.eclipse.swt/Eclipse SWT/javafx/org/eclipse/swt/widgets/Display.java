@@ -458,8 +458,7 @@ public class Display extends Device {
 	 * @return the current display
 	 */
 	public static Display getCurrent() {
-		// TODO
-		return null;
+		return getDefault();
 	}
 
 	/**
@@ -1739,6 +1738,11 @@ public class Display extends Device {
 	 * @see #asyncExec
 	 */
 	public void syncExec(final Runnable runnable) {
+		if (Platform.isFxApplicationThread()) {
+			runnable.run();
+			return;
+		}
+		
 		final Object mutex = new Object();
 		synchronized (mutex) {
 			Platform.runLater(new Runnable() {

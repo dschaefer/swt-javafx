@@ -12,6 +12,8 @@ package org.eclipse.swt.graphics;
 
 import java.io.InputStream;
 
+import javafx.scene.image.WritableImage;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTError;
 import org.eclipse.swt.SWTException;
@@ -71,6 +73,9 @@ import org.eclipse.swt.SWTException;
  *      information</a>
  */
 public final class Image extends Resource implements Drawable {
+	
+	private javafx.scene.image.Image image;
+	
 	/**
 	 * Constructs an empty instance of this class with the specified width and
 	 * height. The result may be drawn upon by creating a GC and using any of
@@ -110,7 +115,7 @@ public final class Image extends Resource implements Drawable {
 	 */
 	public Image(Device device, int width, int height) {
 		super(device);
-		// TODO
+		image = new WritableImage(width, height);
 	}
 
 	/**
@@ -161,7 +166,11 @@ public final class Image extends Resource implements Drawable {
 	 */
 	public Image(Device device, Image srcImage, int flag) {
 		super(device);
-		// TODO
+		// TODO interpret the flag
+		image = new WritableImage(
+				srcImage.image.getPixelReader(),
+				(int)srcImage.image.getWidth(),
+				(int)srcImage.image.getHeight());
 	}
 
 	/**
@@ -203,8 +212,8 @@ public final class Image extends Resource implements Drawable {
 	 *                </ul>
 	 */
 	public Image(Device device, Rectangle bounds) {
-		super(device);
-		// TODO
+		// TODO do the x and y mean anything?
+		this(device, bounds.width, bounds.height);
 	}
 
 	/**
@@ -338,7 +347,8 @@ public final class Image extends Resource implements Drawable {
 	 */
 	public Image(Device device, InputStream stream) {
 		super(device);
-		// TODO
+		image = new javafx.scene.image.Image(stream);
+		createImageData();
 	}
 
 	/**
@@ -379,9 +389,14 @@ public final class Image extends Resource implements Drawable {
 	 */
 	public Image(Device device, String filename) {
 		super(device);
-		// TODO
+		image = new javafx.scene.image.Image(filename);
+		createImageData();
 	}
 
+	void createImageData() {
+		
+	}
+	
 	/**
 	 * Returns the color to which to map the transparent pixel, or null if the
 	 * receiver has no transparent pixel.
@@ -404,7 +419,7 @@ public final class Image extends Resource implements Drawable {
 	 *                </ul>
 	 */
 	public Color getBackground() {
-		// TODO
+		// TODO N/A?
 		return null;
 	}
 
@@ -423,8 +438,7 @@ public final class Image extends Resource implements Drawable {
 	 *                </ul>
 	 */
 	public Rectangle getBounds() {
-		// TODO
-		return new Rectangle(0, 0, 0, 0);
+		return new Rectangle(0, 0, (int)image.getWidth(), (int)image.getHeight());
 	}
 
 	/**
