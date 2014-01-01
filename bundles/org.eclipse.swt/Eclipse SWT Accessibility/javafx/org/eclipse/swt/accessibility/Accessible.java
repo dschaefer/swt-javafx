@@ -57,6 +57,14 @@ public class Accessible {
 	}
 
 	/**
+	 * @since 3.5
+	 * @deprecated
+	 */
+	@Deprecated
+	protected Accessible() {
+	}
+
+	/**
 	 * Adds the listener to the collection of listeners who will
 	 * be notified when an accessible client asks for certain strings,
 	 * such as name, description, help, or keyboard shortcut. The

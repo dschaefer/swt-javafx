@@ -25,6 +25,8 @@ import org.eclipse.swt.widgets.Display;
  */
 public abstract class Device implements Drawable {
 
+	public static boolean DEBUG;
+	
 	private boolean disposed;
 
 	boolean tracking = false;
