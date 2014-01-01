@@ -98,8 +98,9 @@ import org.eclipse.swt.graphics.Rectangle;
 public class Display extends Device {
 
 	Tray tray;
+	// Not API but needs to be set by the JavaFX Application start method.
 	public static Stage primaryStage;
-	static Shell primaryShell;
+	static Shell[] shells = new Shell[0];
 	static Object startupMutex = new Object();
 	static Display defaultDisplay;
 
@@ -793,8 +794,7 @@ public class Display extends Device {
 	 *                </ul>
 	 */
 	public Shell[] getShells() {
-		// TODO
-		return null;
+		return shells;
 	}
 
 	/**

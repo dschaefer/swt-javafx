@@ -254,9 +254,9 @@ public class Shell extends Decorations {
 	public Shell(Display display, int style) {
 		super(null, style);
 
-		if (Display.primaryShell == null) {
+		if (display.getShells().length == 0) {
 			stage = Display.primaryStage;
-			Display.primaryShell = this;
+			Display.shells = new Shell[] { this };
 		} else {
 			// TODO StageStyle
 			// TODO add to display list
